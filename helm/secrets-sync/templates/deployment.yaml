@@ -16,7 +16,7 @@ spec:
       annotations:
         checksum/app: {{ .Files.Get "files/app.py" | sha256sum }}
     spec:
-      serviceAccountName: {{ include "secrets-sync.fullname" . }}-sa
+      serviceAccountName: {{ include "secrets-sync.serviceAccountName" . }}
       securityContext:
         runAsNonRoot: true
         runAsUser: 10001
@@ -49,7 +49,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /ready
-              port: 8081
+              port: http
             periodSeconds: 5
           resources:
             requests:

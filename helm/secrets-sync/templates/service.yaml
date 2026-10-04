@@ -7,7 +7,7 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   selector:
-    app: {{ include "secrets-sync.fullname" . }}
+    {{- include "secrets-sync.selectorLabels" . | nindent 4 }}
   ports:
     - name: http
       port: {{ .Values.service.port }}

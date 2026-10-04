@@ -1,0 +1,29 @@
+replicaCount: 2
+
+image:
+  repository: python
+  tag: "3.12-alpine"
+  pullPolicy: IfNotPresent
+
+fullnameOverride: ""
+
+serviceAccount:
+  # Name of the ServiceAccount to create. Defaults to the release fullname.
+  name: ""
+
+# The Secret the app reads. It is NOT managed by this chart
+# (created out-of-band by scripts/setup.sh, like a secret owned by another team).
+secret:
+  name: db-credentials
+  key: db-password
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  requests:
+    cpu: 20m
+    memory: 32Mi
+  limits:
+    memory: 128Mi

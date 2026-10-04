@@ -1,0 +1,28 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/setup-helm@v4
+
+      - name: helm lint
+        run: helm lint helm/secrets-sync
+
+      - name: render + validate manifests (kubeconform)
+        run: |
+          curl -sSL https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz | tar xz kubeconform
+          helm template secrets-sync helm/secrets-sync --namespace secrets-sync | ./kubeconform -strict -summary
+
+      - name: shellcheck
+        run: shellcheck -x scripts/*.sh
+
+      - name: python syntax
+        run: python3 -m py_compile helm/secrets-sync/files/app.py

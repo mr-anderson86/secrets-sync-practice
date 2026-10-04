@@ -14,7 +14,9 @@ sha12() {
 }
 
 random_password() {
-  LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 24
+  # head closes the pipe after 24 chars, so tr dies with SIGPIPE (141);
+  # swallow that so pipefail/set -e callers don't abort.
+  LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 24 || true
 }
 
 require() {

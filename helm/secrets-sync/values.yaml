@@ -16,6 +16,7 @@ serviceAccount:
 secret:
   name: db-credentials
   key: password
+  refreshIntervalSeconds: 30
 
 service:
   type: ClusterIP

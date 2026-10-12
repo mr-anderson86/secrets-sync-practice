@@ -1,4 +1,4 @@
-.PHONY: help setup deploy status verify rotate verify-rotation logs lint reset
+.PHONY: help setup deploy status verify rotate verify-rotation verify-privilege logs lint reset
 
 help:            ## show targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-16s %s\n", $$1, $$2}'
@@ -20,6 +20,9 @@ rotate:          ## rotate the DB password (simulates the security team)
 
 verify-rotation: ## rotate + check pods pick it up without restarting (Part 3C)
 	@./scripts/verify-rotation.sh
+
+verify-privilege: ## check the app SA has least-privilege RBAC (Part 3A)
+	@./scripts/verify-privilege.sh
 
 logs:            ## tail app logs
 	kubectl -n secrets-sync logs -l app.kubernetes.io/instance=secrets-sync --all-containers --tail=50 -f

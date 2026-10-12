@@ -25,4 +25,4 @@ jobs:
         run: shellcheck -x scripts/*.sh
 
       - name: python syntax
-        run: python3 -m py_compile helm/secrets-sync/files/app.py
+        run: python3 -m py_compile helm/secrets-sync/files/app.py scripts/audit_secrets.py

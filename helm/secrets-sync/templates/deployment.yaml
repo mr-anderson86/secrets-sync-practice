@@ -16,7 +16,7 @@ spec:
       annotations:
         checksum/app: {{ .Files.Get "files/app.py" | sha256sum }}
     spec:
-      serviceAccountName: {{ include "secrets-sync.fullname" . }}-sa
+      serviceAccountName: {{ include "secrets-sync.serviceAccountName" . }}
       securityContext:
         runAsNonRoot: true
         runAsUser: 10001
@@ -37,6 +37,8 @@ spec:
               value: "8080"
             - name: PYTHONDONTWRITEBYTECODE
               value: "1"
+            - name: REFRESH_INTERVAL_SECONDS
+              value: {{ .Values.secret.refreshIntervalSeconds | quote }}
           ports:
             - name: http
               containerPort: 8080
@@ -49,7 +51,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /ready
-              port: 8081
+              port: http
             periodSeconds: 5
           resources:
             requests:

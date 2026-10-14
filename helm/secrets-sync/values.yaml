@@ -15,7 +15,8 @@ serviceAccount:
 # (created out-of-band by scripts/setup.sh, like a secret owned by another team).
 secret:
   name: db-credentials
-  key: db-password
+  key: password
+  refreshIntervalSeconds: 30
 
 service:
   type: ClusterIP
